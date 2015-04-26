@@ -7,7 +7,7 @@
 4. Appropriately label the data set with descriptive activity names. 
 5. Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-## Step 0 - Download, extract, load data
+### Step 0 - Download, extract, load data
 
 Create Directory & File Variables
 ```R
@@ -40,7 +40,7 @@ x_tests <- read.table(x_tests_file, header=FALSE)
 ...
 ```
 
-## Step 1. Merge train & test data sets
+### Step 1. Merge train & test data sets
 
 Create complete x dataset 
 ```R
@@ -57,7 +57,7 @@ Create complete subject dataset
 subject_data <- rbind(subject_train, subject_tests)
 ```
 
-## Step 2. Filter to only mean/std measurements
+### Step 2. Filter to only mean/std measurements
 
 get only features with 'mean' or 'std'
 ```R
@@ -69,7 +69,7 @@ subset the desired columns
 x_data <- x_data[, mean_std_feature_mask]
 ```
 
-## Step 3. Add descriptive activity names to the data set
+### Step 3. Add descriptive activity names to the data set
 
 Add activity name to y_data
 ```R
@@ -82,7 +82,7 @@ Update column name for y_data now that its not just an Id
 y_data <- rename(y_data, activityType = V2)
 ```
 
-## Step 4. Add descriptive variable names
+### Step 4. Add descriptive variable names
 
 Merge all data sets together (i did this a little later than normal to minimize step 2/3 problems)
 ```R
@@ -102,7 +102,7 @@ names(data) <- gsub("\\()", "", names(data)) # Get rid of '()' after mean / std
 names(data) <- gsub("std", "StandardDeviation", names(data)) # Replace 'std' with 'StandardDeviation'
 ```
 
-## Step 5. Create second, independent tidy data set with average of each variable, write to file
+### Step 5. Create second, independent tidy data set with average of each variable, write to file
 
 Aggregate the data, but subject & activity, using the mean function across the values
 ```R
@@ -124,71 +124,83 @@ Write out to tidy_data.txt file
 write.table(tidy_data, file="tidy_data.txt", row.name=FALSE)
 ```
 
-| Variable                                                  | Description |
-|-----------------------------------------------------------|---|
-| timeBodyAccelerometer-mean-X                              |   |
-| timeBodyAccelerometer-mean-Y                              |   |
-| timeBodyAccelerometer-mean-Z                              |   |
-| timeBodyAccelerometer-StandardDeviation-X                 |   |
-| timeBodyAccelerometer-StandardDeviation-Y                 |   |
-| timeBodyAccelerometer-StandardDeviation-Z                 |   |
-| timeGravityAccelerometer-mean-X                           |   |
-| timeGravityAccelerometer-mean-Y                           |   |
-| timeGravityAccelerometer-mean-Z                           |   |
-| timeGravityAccelerometer-StandardDeviation-X              |   |
-| timeGravityAccelerometer-StandardDeviation-Y              |   |
-| timeGravityAccelerometer-StandardDeviation-Z              |   |
-| timeBodyAccelerometerJerk-mean-X                          |   |
-| timeBodyAccelerometerJerk-mean-Y                          |   |
-| timeBodyAccelerometerJerk-mean-Z                          |   |
-| timeBodyAccelerometerJerk-StandardDeviation-X             |   |
-| timeBodyAccelerometerJerk-StandardDeviation-Y             |   |
-| timeBodyAccelerometerJerk-StandardDeviation-Z             |   |
-| timeBodyGyroscope-mean-X                                  |   |
-| timeBodyGyroscope-mean-Y                                  |   |
-| timeBodyGyroscope-mean-Z                                  |   |
-| timeBodyGyroscope-StandardDeviation-X                     |   |
-| timeBodyGyroscope-StandardDeviation-Y                     |   |
-| timeBodyGyroscope-StandardDeviation-Z                     |   |
-| timeBodyGyroscopeJerk-mean-X                              |   |
-| timeBodyGyroscopeJerk-mean-Y                              |   |
-| timeBodyGyroscopeJerk-mean-Z                              |   |
-| timeBodyGyroscopeJerk-StandardDeviation-X                 |   |
-| timeBodyGyroscopeJerk-StandardDeviation-Y                 |   |
-| timeBodyGyroscopeJerk-StandardDeviation-Z                 |   |
-| timeBodyAccelerometerMagnitude-mean                       |   |
-| timeBodyAccelerometerMagnitude-StandardDeviation          |   |
-| timeGravityAccelerometerMagnitude-mean                    |   |
-| timeGravityAccelerometerMagnitude-StandardDeviation       |   |
-| timeBodyAccelerometerJerkMagnitude-mean                   |   |
-| timeBodyAccelerometerJerkMagnitude-StandardDeviation      |   |
-| timeBodyGyroscopeMagnitude-mean                           |   |
-| timeBodyGyroscopeMagnitude-StandardDeviation              |   |
-| timeBodyGyroscopeJerkMagnitude-mean                       |   |
-| timeBodyGyroscopeJerkMagnitude-StandardDeviation          |   |
-| frequencyBodyAccelerometer-mean-X                         |   |
-| frequencyBodyAccelerometer-mean-Y                         |   |
-| frequencyBodyAccelerometer-mean-Z                         |   |
-| frequencyBodyAccelerometer-StandardDeviation-X            |   |
-| frequencyBodyAccelerometer-StandardDeviation-Y            |   |
-| frequencyBodyAccelerometer-StandardDeviation-Z            |   |
-| frequencyBodyAccelerometerJerk-mean-X                     |   |
-| frequencyBodyAccelerometerJerk-mean-Y                     |   |
-| frequencyBodyAccelerometerJerk-mean-Z                     |   |
-| frequencyBodyAccelerometerJerk-StandardDeviation-X        |   |
-| frequencyBodyAccelerometerJerk-StandardDeviation-Y        |   |
-| frequencyBodyAccelerometerJerk-StandardDeviation-Z        |   |
-| frequencyBodyGyroscope-mean-X                             |   |
-| frequencyBodyGyroscope-mean-Y                             |   |
-| frequencyBodyGyroscope-mean-Z                             |   |
-| frequencyBodyGyroscope-StandardDeviation-X                |   |
-| frequencyBodyGyroscope-StandardDeviation-Y                |   |
-| frequencyBodyGyroscope-StandardDeviation-Z                |   |
-| frequencyBodyAccelerometerMagnitude-mean                  |   |
-| frequencyBodyAccelerometerMagnitude-StandardDeviation     |   |
-| frequencyBodyAccelerometerJerkMagnitude-mean              |   |
-| frequencyBodyAccelerometerJerkMagnitude-StandardDeviation |   |
-| frequencyBodyGyroscopeMagnitude-mean                      |   |
-| frequencyBodyGyroscopeMagnitude-StandardDeviation         |   |
-| frequencyBodyGyroscopeJerkMagnitude-mean                  |   |
-| frequencyBodyGyroscopeJerkMagnitude-StandardDeviation     |   |
+
+# Tidy Data Output
+### File description
+Output is 'tidy_data.txt' which is a table file (spaces are separators) which contains 180 rows of 68 variables
+180 rows are determined as aggregated as follows:
+- Per subjectId (participant) = 1..30
+- Per activityType (6 types) = laying, sitting, standing, walking, walking_downstairs, walking_upstairs 
+Therefore 6 types * 30 participants = 180 rows
+
+### Variable list (averaged data)
+| Variable                                                  |
+|-----------------------------------------------------------|
+| subjectId                                                 |
+| activityType                                              |
+| timeBodyAccelerometer-mean-X                              |
+| timeBodyAccelerometer-mean-Y                              |
+| timeBodyAccelerometer-mean-Z                              |
+| timeBodyAccelerometer-StandardDeviation-X                 |
+| timeBodyAccelerometer-StandardDeviation-Y                 |
+| timeBodyAccelerometer-StandardDeviation-Z                 |
+| timeGravityAccelerometer-mean-X                           |
+| timeGravityAccelerometer-mean-Y                           |
+| timeGravityAccelerometer-mean-Z                           |
+| timeGravityAccelerometer-StandardDeviation-X              |
+| timeGravityAccelerometer-StandardDeviation-Y              |
+| timeGravityAccelerometer-StandardDeviation-Z              |
+| timeBodyAccelerometerJerk-mean-X                          |
+| timeBodyAccelerometerJerk-mean-Y                          |
+| timeBodyAccelerometerJerk-mean-Z                          |
+| timeBodyAccelerometerJerk-StandardDeviation-X             |
+| timeBodyAccelerometerJerk-StandardDeviation-Y             |
+| timeBodyAccelerometerJerk-StandardDeviation-Z             |
+| timeBodyGyroscope-mean-X                                  |
+| timeBodyGyroscope-mean-Y                                  |
+| timeBodyGyroscope-mean-Z                                  |
+| timeBodyGyroscope-StandardDeviation-X                     |
+| timeBodyGyroscope-StandardDeviation-Y                     |
+| timeBodyGyroscope-StandardDeviation-Z                     |
+| timeBodyGyroscopeJerk-mean-X                              |
+| timeBodyGyroscopeJerk-mean-Y                              |
+| timeBodyGyroscopeJerk-mean-Z                              |
+| timeBodyGyroscopeJerk-StandardDeviation-X                 |
+| timeBodyGyroscopeJerk-StandardDeviation-Y                 |
+| timeBodyGyroscopeJerk-StandardDeviation-Z                 |
+| timeBodyAccelerometerMagnitude-mean                       |
+| timeBodyAccelerometerMagnitude-StandardDeviation          |
+| timeGravityAccelerometerMagnitude-mean                    |
+| timeGravityAccelerometerMagnitude-StandardDeviation       |
+| timeBodyAccelerometerJerkMagnitude-mean                   |
+| timeBodyAccelerometerJerkMagnitude-StandardDeviation      |
+| timeBodyGyroscopeMagnitude-mean                           |
+| timeBodyGyroscopeMagnitude-StandardDeviation              |
+| timeBodyGyroscopeJerkMagnitude-mean                       |
+| timeBodyGyroscopeJerkMagnitude-StandardDeviation          |
+| frequencyBodyAccelerometer-mean-X                         |
+| frequencyBodyAccelerometer-mean-Y                         |
+| frequencyBodyAccelerometer-mean-Z                         |
+| frequencyBodyAccelerometer-StandardDeviation-X            |
+| frequencyBodyAccelerometer-StandardDeviation-Y            |
+| frequencyBodyAccelerometer-StandardDeviation-Z            |
+| frequencyBodyAccelerometerJerk-mean-X                     |
+| frequencyBodyAccelerometerJerk-mean-Y                     |
+| frequencyBodyAccelerometerJerk-mean-Z                     |
+| frequencyBodyAccelerometerJerk-StandardDeviation-X        |
+| frequencyBodyAccelerometerJerk-StandardDeviation-Y        |
+| frequencyBodyAccelerometerJerk-StandardDeviation-Z        |
+| frequencyBodyGyroscope-mean-X                             |
+| frequencyBodyGyroscope-mean-Y                             |
+| frequencyBodyGyroscope-mean-Z                             |
+| frequencyBodyGyroscope-StandardDeviation-X                |
+| frequencyBodyGyroscope-StandardDeviation-Y                |
+| frequencyBodyGyroscope-StandardDeviation-Z                |
+| frequencyBodyAccelerometerMagnitude-mean                  |
+| frequencyBodyAccelerometerMagnitude-StandardDeviation     |
+| frequencyBodyAccelerometerJerkMagnitude-mean              |
+| frequencyBodyAccelerometerJerkMagnitude-StandardDeviation |
+| frequencyBodyGyroscopeMagnitude-mean                      |
+| frequencyBodyGyroscopeMagnitude-StandardDeviation         |
+| frequencyBodyGyroscopeJerkMagnitude-mean                  |
+| frequencyBodyGyroscopeJerkMagnitude-StandardDeviation     |
