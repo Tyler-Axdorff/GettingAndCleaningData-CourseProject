@@ -9,7 +9,8 @@
 
 ## Step 0 - Download, extract, load data
 
-### Create Directory & File Variables
+Create Directory & File Variables
+```R
 data_dir <- "./UCI\ HAR\ Dataset"
 tests_dir <- paste(data_dir, "/test", sep="")
 train_dir <- paste(data_dir, "/train", sep="")
@@ -22,61 +23,74 @@ y_tests_file <- paste(tests_dir, "/y_test.txt", sep="")
 y_train_file <- paste(train_dir, "/y_train.txt", sep="")
 subject_tests_file <- paste(tests_dir, "/subject_test.txt", sep="")
 subject_train_file <- paste(train_dir, "/subject_train.txt", sep="")
+```
 
-### Download & extract zip if it doesn't exist
+Download & extract zip if it doesn't exist
+```R
 if (!file.exists(data_dir)) {
   fileUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
   download.file(fileUrl,destfile="./UCI HAR Dataset.zip",method="curl")
   unzip(zipfile="./UCI HAR Dataset.zip",exdir="./")
 }
+```
 
-# Load in data
+Load in data
+```R
 x_tests <- read.table(x_tests_file, header=FALSE)
 ...
+```
 
-########################################
-# Step 1. Merge train & test data sets #
-########################################
+## Step 1. Merge train & test data sets
 
-# Create complete x dataset 
+Create complete x dataset 
+```R
 x_data <- rbind(x_train, x_tests)
+```
 
-# Create complete y dataset
+Create complete y dataset
+```R
 y_data <- rbind(y_train, y_tests)
+```
 
-# Create complete subject dataset
+Create complete subject dataset
+```R
 subject_data <- rbind(subject_train, subject_tests)
+```
 
-################################################
-# Step 2. Filter to only mean/std measurements #
-################################################
+## Step 2. Filter to only mean/std measurements
 
-# get only features with 'mean' or 'std'
+get only features with 'mean' or 'std'
+```R
 mean_std_feature_mask <- grep("-(mean|std)\\(\\)", features[, 2])
+```
 
-# subset the desired columns
+subset the desired columns
+```R
 x_data <- x_data[, mean_std_feature_mask]
+```
 
-##########################################################
-# Step 3. Add descriptive activity names to the data set #
-##########################################################
+## Step 3. Add descriptive activity names to the data set
 
-# Add activity name to y_data
+Add activity name to y_data
+```R
 y_data[, 2] <- activity_labels[y_data[, 1], 2] 
-# This works by using the ActivityId column from y_data (column 1) and using
-#  it as an index into column 1 of activity_labels and pulling out column 2 (detailed activity name)
+```
+This works by using the ActivityId column from y_data (column 1) and using it as an index into column 1 of activity_labels and pulling out column 2 (detailed activity name)
 
-# Update column name for y_data now that its not just an Id
+Update column name for y_data now that its not just an Id
+```R
 y_data <- rename(y_data, activityType = V2)
+```
 
-##########################################
-# Step 4. Add descriptive variable names #
-##########################################
+## Step 4. Add descriptive variable names
 
-# Merge all data sets together (i did this a little later than normal to minimize step 2/3 problems)
+Merge all data sets together (i did this a little later than normal to minimize step 2/3 problems)
+```R
 data <- cbind(x_data, y_data, subject_data)
+```
 
-# Clean up data names
+Clean up data names
+```R
 names(data) <- gsub("^t", "time", names(data)) # Replace 't' with 'time'
 names(data) <- gsub("^f", "frequency", names(data)) # Replace 'f' with 'frequency'
 names(data) <- gsub("[Aa]cc", "Accelerometer", names(data)) # Replace 'Acc' or 'acc' with 'Accelerometer'
@@ -86,23 +100,29 @@ names(data) <- gsub("[Bb]ody[Bb]ody", "Body", names(data)) # Replace 'BodyBody' 
 names(data) <- gsub("gravity","Gravity", names(data)) # Replace 'gravity' with 'Gravity'
 names(data) <- gsub("\\()", "", names(data)) # Get rid of '()' after mean / std
 names(data) <- gsub("std", "StandardDeviation", names(data)) # Replace 'std' with 'StandardDeviation'
+```
 
-#################################################################################################
-# Step 5. Create second, independent tidy data set with average of each variable, write to file #
-#################################################################################################
+## Step 5. Create second, independent tidy data set with average of each variable, write to file
 
-# Aggregate the data, but subject & activity, using the mean function across the values
+Aggregate the data, but subject & activity, using the mean function across the values
+```R
 tidy_data <- aggregate(. ~subjectId + activityType, data, mean)
+```
 
-# Order the data by subjectId, then activityType
+Order the data by subjectId, then activityType
+```R
 tidy_data <- tidy_data[ order(tidy_data$subjectId, tidy_data$activityType), ]
+```
 
-# Get rid of redundant activityId (since we have activityType)
+Get rid of redundant activityId (since we have activityType)
+```R
 tidy_data <- tidy_data[, !names(tidy_data) %in% c("activityId")]
+```
 
-# Write out to tidy_data.txt file
+Write out to tidy_data.txt file
+```R
 write.table(tidy_data, file="tidy_data.txt", row.name=FALSE)
-
+```
 
 | Variable                                                  | Description |
 |-----------------------------------------------------------|---|
