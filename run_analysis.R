@@ -97,7 +97,7 @@ y_data[, 2] <- activity_labels[y_data[, 1], 2]
 #  it as an index into column 1 of activity_labels and pulling out column 2 (detailed activity name)
 
 # Update column name for y_data now that its not just an Id
-y_train <- rename(y_data, activityType = V2)
+y_data <- rename(y_data, activityType = V2)
 #colnames(y_train) <- c("activityId","activityType")
 
 ##########################################
@@ -115,16 +115,21 @@ names(data) <- gsub("[Gg]yro", "Gyroscope", names(data)) # Replace 'Gyro' or 'gy
 names(data) <- gsub("[Mm]ag", "Magnitude", names(data)) # Replace 'Mag' or 'mag' with 'Magnitude'
 names(data) <- gsub("[Bb]ody[Bb]ody", "Body", names(data)) # Replace 'BodyBody' or 'bodybody' with 'Body'
 names(data) <- gsub("gravity","Gravity", names(data)) # Replace 'gravity' with 'Gravity'
+names(data) <- gsub("\\()", "", names(data)) # Get rid of '()' after mean / std
+names(data) <- gsub("std", "StandardDeviation", names(data)) # Replace 'std' with 'StandardDeviation'
 
 #################################################################################################
 # Step 5. Create second, independent tidy data set with average of each variable, write to file #
 #################################################################################################
 
 # Aggregate the data, but subject & activity, using the mean function across the values
-tidy_data <- aggregate(. ~subjectId + activityId, data, mean)
+tidy_data <- aggregate(. ~subjectId + activityType, data, mean)
 
-# Order the data by subjectId, then activityId
-tidy_data <- tidy_data[ order(tidy_data$subjectId, tidy_data$activityId), ]
+# Order the data by subjectId, then activityType
+tidy_data <- tidy_data[ order(tidy_data$subjectId, tidy_data$activityType), ]
+
+# Get rid of redundant activityId (since we have activityType)
+tidy_data <- tidy_data[, !names(tidy_data) %in% c("activityId")]
 
 # Write out to tidy_data.txt file
 write.table(tidy_data, file="tidy_data.txt", row.name=FALSE)
