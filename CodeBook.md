@@ -131,10 +131,10 @@ Output is 'tidy_data.txt' which is a table file (spaces are separators) which co
 180 rows are determined as aggregated as follows:
 - Per subjectId (participant) = 1..30
 - Per activityType (6 types) = laying, sitting, standing, walking, walking_downstairs, walking_upstairs 
-Therefore 6 types * 30 participants = 180 rows
+- Therefore 6 types * 30 participants = 180 rows
 
 ### Variable list (averaged data)
-| Variable                                                  |
+| Variables  (Column Names)                                 |
 |-----------------------------------------------------------|
 | subjectId                                                 |
 | activityType                                              |
